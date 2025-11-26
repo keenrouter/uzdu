@@ -5,6 +5,11 @@ name: Publish to NPM registry
 
 on:
   workflow_dispatch:
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   publish-npm:
     #needs: build
@@ -30,13 +35,15 @@ jobs:
         run: ls -la ~
       - name: assign version
         run: npm version --no-git-tag-version prerelease --preid=alpha
-      - name: create .npmrc
-        run: |
-          cat <<EOF > .npmrc
-          registry=https://registry.npmjs.org
-          //registry.npmjs.org:_authToken=${NODE_AUTH_TOKEN}
-          EOF
+      #- name: create .npmrc
+      #  run: |
+      #    cat <<EOF > .npmrc
+      #    registry=https://registry.npmjs.org
+      #    _  //registry.npmjs.org:_authToken=${NODE_AUTH_TOKEN}
+      #    EOF
       - name: publish
         run: npx clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        #env:
+        #  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: cat npmrc
+        run: cat /home/runner/work/_temp/.npmrc
