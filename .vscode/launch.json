@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug ts-mocha",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-mocha",
+      "runtimeArgs": [
+          "-p",
+          "test/tsconfig.json"
+      ],
+      "env": {
+          "DEBUG": "true",
+      }
+    }
+  ]
+}

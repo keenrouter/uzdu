@@ -1,0 +1,29 @@
+{
+  ".metadata.json": {
+    "headers": {
+      "ContentType": "application/json",
+      "CacheControl": "no-cache"
+    }
+  },
+  "appsource/index.html": {
+    "key": "appsource/index.html",
+    "headers": {
+      "CacheControl": "max-age=600, stale-while-revalidate=180, stale-if-error=300, public",
+      "ContentType": "text/html"
+    }
+  },
+  "icons/16/A.png": {
+    "key": "icons/16/A.png",
+    "headers": {
+      "CacheControl": "no-cache",
+      "ContentType": "image/png"
+    }
+  },
+  "index.html": {
+    "key": "index.html",
+    "headers": {
+      "CacheControl": "max-age=600, stale-while-revalidate=180, stale-if-error=300, public",
+      "ContentType": "text/html"
+    }
+  }
+}

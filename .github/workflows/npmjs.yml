@@ -1,0 +1,42 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish to NPM registry
+
+on:
+  workflow_dispatch:
+jobs:
+  publish-npm:
+    #needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+      - name: Setup Volta
+        uses: volta-cli/action@v4
+        with:
+          node-version: 24.x
+          registry-url: https://registry.npmjs.org
+      - name: install NPM dependencies
+        run: npm install
+      - name: build
+        run: npm run build
+      - name: print .npmrc
+        run: cat .npmrc
+      - name: print ~/.npmrc
+        run: cat ~/.npmrc
+      - name: assign version
+        run: npm version --no-git-tag-version prerelease --preid=alpha
+      - name: create .npmrc
+        run: |
+          cat <<EOF > .npmrc
+          registry=https://registry.npmjs.org
+          //registry.npmjs.org:_authToken=${NODE_AUTH_TOKEN}
+          EOF
+      - name: publish
+        run: clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
