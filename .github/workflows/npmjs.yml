@@ -37,6 +37,6 @@ jobs:
           //registry.npmjs.org:_authToken=${NODE_AUTH_TOKEN}
           EOF
       - name: publish
-        run: clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp
+        run: npx clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
