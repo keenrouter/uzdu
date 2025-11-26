@@ -24,10 +24,10 @@ jobs:
         run: npm install
       - name: build
         run: npm run build
-      - name: print .npmrc
-        run: cat .npmrc
-      - name: print ~/.npmrc
-        run: cat ~/.npmrc
+      - name: list current directory
+        run: ls -la
+      - name: list home dir
+        run: ls -la ~
       - name: assign version
         run: npm version --no-git-tag-version prerelease --preid=alpha
       - name: create .npmrc
