@@ -5,6 +5,7 @@
   "bin": {
     "uzdu": "dist/uzdu.js"
   },
+  "type": "module",
   "main": "dist/uzdu.js",
   "types": "dist/uzdu.d.ts",
   "scripts": {
@@ -20,14 +21,15 @@
     "test:dist": "npm run test:zip && npm run test:http:upload",
     "test:metadata": "tsx src/uzdu.ts metadata test/website",
     "test": "ts-mocha -p test/tsconfig.json",
-    "test:publish": "clean-publish --before-script ./releng/timestamped-version.mjs --without-publish",
-    "test:publish-dry": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp --dry-run",
+    "_test": "ts-mocha",
+    "test:publish": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp",
+    "test:publish-dry": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp --without-publish",
     "help": "ts-node src/uzdu.ts -h",
     "ver": "ts-node src/uzdu.ts -V",
     "ci:build": "npm run build",
     "_version": "npm test",
     "_prepack": "clean-publish",
-    "_postversion": "git push --tags origin master"
+    "postversion": "git push --tags origin master"
   },
   "keywords": [
     "azure",

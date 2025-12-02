@@ -1,10 +1,12 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
 
-name: Publish to NPM registry
+name: Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+    - dev
 
 permissions:
   id-token: write  # Required for OIDC
@@ -14,19 +16,24 @@ jobs:
   publish-npm:
     #needs: build
     runs-on: ubuntu-latest
+    #if: github.ref == 'refs/heads/dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
+    if: github.base_ref == 'dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
+    #if: startsWith(github.ref, 'refs/tags/') && github.base_ref == 'master' && contains(fromJSON('["release", "rc"]'), github.event.head_commit.message)
     permissions:
       contents: read
       id-token: write
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
       - name: Setup Volta
         uses: volta-cli/action@v4
       - name: install NPM dependencies
         run: npm install
       - name: build
         run: npm run build
-      - name: assign version
-        run: npm version --no-git-tag-version prerelease --preid=alpha
+      - name: test
+        run: npm test
       - name: publish
-        run: npx clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp
+        run: npx -y semantic-release@25
