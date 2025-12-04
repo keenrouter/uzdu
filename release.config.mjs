@@ -2,7 +2,7 @@
  * @type {import('semantic-release').GlobalConfig}
  */
 export default {
-  branches: ["master"],
+  branches: ["master", "dev"],
   plugins: [
     ["@semantic-release/npm",
       {
