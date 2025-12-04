@@ -48,5 +48,5 @@ jobs:
       - name: Publish in Github
         if: ${{ !env.ACT }}
         run: npx -y semantic-release@25
-        #env:
-        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
