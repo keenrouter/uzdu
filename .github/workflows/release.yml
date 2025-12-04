@@ -35,13 +35,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: ${{ github.ref }}
-#      - name: Setup Volta
-#        uses: volta-cli/action@v4
-#      - uses: actions/setup-node@v6
-#        with:
-#          node-version: 24.x
-      - name: check bun
-        run: bun -v
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
@@ -57,10 +50,12 @@ jobs:
         run: npm test
       - name: Skim distribution to ${{ env.publishTempDir }}
         run: ./releng/skim-dist.mjs --publishTempDir=${{ env.publishTempDir }}
-      - name: publish with ACT
+      - name: List ${{ env.publishTempDir }}
+        run: ls -la ${{ env.publishTempDir }}
+      - name: Publish with ACT
         if: ${{ env.ACT }} ## gh act -j release --secret-file .env
         run: npx -y semantic-release@25 --no-ci
-      - name: publish in Github
+      - name: Publish in Github
         if: ${{ !env.ACT }}
         run: npx -y semantic-release@25
         env:
