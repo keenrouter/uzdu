@@ -47,6 +47,6 @@ jobs:
         run: npx -y semantic-release@25 --no-ci --dry-run
       - name: Publish in Github
         if: ${{ !env.ACT }}
-        run: npx -y semantic-release@25
+        run: npx -y semantic-release@25 --no-ci
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
