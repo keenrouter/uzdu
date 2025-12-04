@@ -1,6 +1,6 @@
 {
   "name": "uzdu",
-  "version": "0.0.0",
+  "version": "0.0.0-dev",
   "description": "Universal zipper, downloader and uploader - UZDU. Move files to/from zip, clouds (AWS, Azure), to HTTP PUT (e.g. Nexus) and to SSH",
   "bin": {
     "uzdu": "dist/uzdu.js"
@@ -24,12 +24,14 @@
     "_test": "ts-mocha",
     "test:publish": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp",
     "test:publish-dry": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp --without-publish",
+    "test:pack": "clean-publish --temp-dir publish-temp --without-publish",
+    "test:peeldist": "node ./releng/skim-dist.mjs --publishTempDir=tmpPublish",
     "help": "ts-node src/uzdu.ts -h",
     "ver": "ts-node src/uzdu.ts -V",
     "ci:build": "npm run build",
     "_version": "npm test",
     "_prepack": "clean-publish",
-    "postversion": "git push --tags origin master"
+    "_postversion": "git push --tags origin master"
   },
   "keywords": [
     "azure",
@@ -84,7 +86,7 @@
     "ssh2": "^1.17.0"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "engines": {
     "node": ">=20"
