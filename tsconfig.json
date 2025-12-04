@@ -22,7 +22,7 @@
   },
   "lib": ["ESNext"],
   "include": [
-    "src/**/*.ts",
+    "src/**/*.ts"
   ],
   "ts-node": {
     "compilerOptions": {

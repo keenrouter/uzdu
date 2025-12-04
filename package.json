@@ -1,10 +1,11 @@
 {
   "name": "uzdu",
-  "version": "0.0.0",
+  "version": "0.0.0-dev",
   "description": "Universal zipper, downloader and uploader - UZDU. Move files to/from zip, clouds (AWS, Azure), to HTTP PUT (e.g. Nexus) and to SSH",
   "bin": {
     "uzdu": "dist/uzdu.js"
   },
+  "type": "module",
   "main": "dist/uzdu.js",
   "types": "dist/uzdu.d.ts",
   "scripts": {
@@ -20,8 +21,11 @@
     "test:dist": "npm run test:zip && npm run test:http:upload",
     "test:metadata": "tsx src/uzdu.ts metadata test/website",
     "test": "ts-mocha -p test/tsconfig.json",
-    "test:publish": "clean-publish --before-script ./releng/timestamped-version.mjs --without-publish",
-    "test:publish-dry": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp --dry-run",
+    "_test": "ts-mocha",
+    "test:publish": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp",
+    "test:publish-dry": "clean-publish --before-script ./releng/timestamped-version.mjs --temp-dir publish-temp --without-publish",
+    "test:pack": "clean-publish --temp-dir publish-temp --without-publish",
+    "test:peeldist": "node ./releng/skim-dist.mjs --publishTempDir=tmpPublish",
     "help": "ts-node src/uzdu.ts -h",
     "ver": "ts-node src/uzdu.ts -V",
     "ci:build": "npm run build",
@@ -82,7 +86,7 @@
     "ssh2": "^1.17.0"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "engines": {
     "node": ">=20"
