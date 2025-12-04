@@ -3,5 +3,5 @@
  */
 export default {
   branches: ["master", "dev"],
-  dryRun: true,
+  plugins: ["@semantic-release/commit-analyzer", "@semantic-release/npm"]
 };

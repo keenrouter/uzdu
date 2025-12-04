@@ -13,11 +13,13 @@ permissions:
   contents: read
 
 jobs:
-  publish-npm:
+  release:
     #needs: build
     runs-on: ubuntu-latest
+    container:
+      image: skipero/nodejs-bun-bash:24
     #if: github.ref == 'refs/heads/dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
-    if: github.base_ref == 'dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
+    #if: github.base_ref == 'dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
     #if: startsWith(github.ref, 'refs/tags/') && github.base_ref == 'master' && contains(fromJSON('["release", "rc"]'), github.event.head_commit.message)
     permissions:
       contents: read
@@ -27,13 +29,33 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: ${{ github.ref }}
-      - name: Setup Volta
-        uses: volta-cli/action@v4
+#      - name: Setup Volta
+#        uses: volta-cli/action@v4
+#      - uses: actions/setup-node@v6
+#        with:
+#          node-version: 24.x
+      - name: check bun
+        run: bun -v
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        with:
+          path: '~/.npm'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: install NPM dependencies
-        run: npm install
+        run: npm ci
       - name: build
         run: npm run build
       - name: test
         run: npm test
-      - name: publish
+#      - name: Install Git
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y git
+      - name: publish with ACT
+        if: ${{ env.ACT }} ## gh act -j release --secret-file .env -P ubuntu-latest=skipero/nodejs-git-bash
+        run: npx -y semantic-release@25 --dryRun
+      - name: publish in Github
+        if: ${{ !env.ACT }}
         run: npx -y semantic-release@25
