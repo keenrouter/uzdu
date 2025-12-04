@@ -1,15 +1,12 @@
 /**
- * @type {import('semantic-release').GlobalConfig}
+ * @type {{ plugins: (string | [string, {pkgRoot: string}])[]}}
  */
 export default {
-  branches: ["master", "dev"],
+  branches: ["master"],
   plugins: [
-    ["@semantic-release/npm",
-      {
-        "npmPublish": false,
-        "tarballDir": "tmpTar",
-        "pkgRoot": "distTemp",
-      }
-    ],
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    ["@semantic-release/npm", {pkgRoot: "distTemp"}],
   ]
 };

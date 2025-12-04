@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   release:
+    if:  github.base_ref == 'master'
     #needs: build
     runs-on: ubuntu-latest
     container:
@@ -28,8 +29,6 @@ jobs:
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for trusted publishing and npm provenance
 
-    env:
-      publishTempDir: distTemp
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
@@ -48,13 +47,11 @@ jobs:
         run: npm run build
       - name: test
         run: npm test
-      - name: Skim distribution to ${{ env.publishTempDir }}
-        run: ./releng/skim-dist.mjs --publishTempDir=${{ env.publishTempDir }}
-      - name: List ${{ env.publishTempDir }}
-        run: ls -la ${{ env.publishTempDir }}
+      - name: Skim distribution
+        run: ./.github/scripts/skim-dist.mjs
       - name: Publish with ACT
         if: ${{ env.ACT }} ## gh act -j release --secret-file .env
-        run: npx -y semantic-release@25 --no-ci
+        run: npx -y semantic-release@25 --no-ci --dry-run
       - name: Publish in Github
         if: ${{ !env.ACT }}
         run: npx -y semantic-release@25

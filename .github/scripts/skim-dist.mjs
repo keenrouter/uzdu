@@ -3,13 +3,20 @@
 import { readFileSync, writeFileSync, cpSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import relConfig from "../../release.config.mjs";
 
 const args = getArgs();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const buildDir = resolve(__dirname, '..', args.buildDir || "dist");
-const publishTempDir = args.publishTempDir;
-const originalPackageJsonPath = resolve(__dirname, '..', 'package.json');
+const buildDir = resolve(__dirname, '..', '..', args.buildDir || "dist");
+const releaseNpmPlugin = relConfig.plugins.find((plugin) => {
+  if(Array.isArray(plugin) && plugin[0] == "@semantic-release/npm") return true;
+  return false;
+});
+const pkgRoot = Array.isArray(releaseNpmPlugin) ? releaseNpmPlugin[1].pkgRoot : undefined;
+const publishTempDir = pkgRoot || args.publishTempDir;
+console.info(`Temporary distribution directory: ${publishTempDir}`);
+const originalPackageJsonPath = resolve(__dirname, '..', '..', 'package.json');
 const originalPackageJson = JSON.parse(readFileSync(originalPackageJsonPath, 'utf8'));
 const { 
   name, version, description, bin, type, main, types, 
@@ -24,10 +31,10 @@ const files = ["lib"];
 const packageJson = {
   name, version, description, bin, type, main, types, 
   keywords, author, repository, license, dependencies,
-  engines, publishConfig, files
+  engines, files
 }
-cpSync(buildDir, resolve(__dirname, '..', publishTempDir, "lib"), { recursive: true });
-writeFileSync(resolve(__dirname, '..', publishTempDir, 'package.json'), JSON.stringify(packageJson, null, 2) + '\n', 'utf8');
+cpSync(buildDir, resolve(__dirname, '..', '..', publishTempDir, "lib"), { recursive: true });
+writeFileSync(resolve(__dirname, '..', '..', publishTempDir, 'package.json'), JSON.stringify(packageJson, null, 2) + '\n', 'utf8');
 
 /**
  * 
@@ -52,6 +59,5 @@ function getArgs(){
     }
     return args;
   }, {});
-  if(!argsObject.publishTempDir) throw new Error("--publishTempDir=<path> is required.");
   return argsObject;
 }
