@@ -16,7 +16,7 @@ jobs:
   release:
     #needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     container:
       image: skipero/node-for-ghactions:24
     #if: github.ref == 'refs/heads/dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
