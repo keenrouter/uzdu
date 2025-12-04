@@ -40,6 +40,8 @@ jobs:
         run: npm run build
       - name: test
         run: npm test
+      - name: check git directory
+        run: git rev-parse --git-dir .
       #- name: Skim distribution
       #  run: ./.github/scripts/skim-dist.mjs
       - name: Publish with ACT
