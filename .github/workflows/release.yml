@@ -40,8 +40,8 @@ jobs:
         run: npm run build
       - name: test
         run: npm test
-      - name: Skim distribution
-        run: ./.github/scripts/skim-dist.mjs
+      #- name: Skim distribution
+      #  run: ./.github/scripts/skim-dist.mjs
       - name: Publish with ACT
         if: ${{ env.ACT }} ## gh act -j release --secret-file .env
         run: npx -y semantic-release@25 --no-ci --dry-run
