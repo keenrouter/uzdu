@@ -2,7 +2,7 @@
  * @type {{ plugins: (string | [string, {pkgRoot: string}])[]}}
  */
 export default {
-  branches: ["master"],
+  branches: ["master", "main"],
   plugins: [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
