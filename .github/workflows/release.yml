@@ -16,6 +16,7 @@ jobs:
   release:
     #needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     container:
       image: skipero/node-for-ghactions:24
     #if: github.ref == 'refs/heads/dev' && (startsWith(github.event.head_commit.message, 'release ') || startsWith(github.event.head_commit.message, 'rc ') )
@@ -47,5 +48,5 @@ jobs:
       - name: Publish in Github
         if: ${{ !env.ACT }}
         run: npx -y semantic-release@25
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
